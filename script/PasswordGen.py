@@ -34,7 +34,7 @@ class Password:
 			Shell = Password("","","","","")
 
 		if not safe_mode:
-			print("Its important to keep the key, context and master key above a secret or private for more security")
+			print("Its important to keep the key, context and master key below a secret or private for more security")
 
 		attributes = Shell.askInfo(safe_mode, hash)
 		password = Shell.passwordGen(lock, attributes, base_permission)

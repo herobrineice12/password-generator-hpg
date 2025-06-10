@@ -7,7 +7,7 @@ if __name__ == "__main__":
 	print(f"\n{data_package[0]}")
 	pyperclip.copy(data_package[0])
 	print(f"This password has {len(data_package[0])} characters\n")
-	if len(data_package) == 2:
+	if data_package[1] != None:
 		output = ask("Do you want to display the secret hash? (0,1): ")
 		if output:
 			print(f"{data_package[1]}")
