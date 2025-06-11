@@ -6,7 +6,9 @@ def ask(message: str) -> bool:
             if variable in choice and variable == 0:
                 return False
             elif variable in choice and variable == 1:
-                return True    
+                return True
+            elif variable == -1:
+                exit()    
             break
 
         except Exception:

@@ -66,7 +66,7 @@ class Password:
 		return seeds
     
 	def passwordGen(self, outputSize, seeds, base_permission):
-		blake_mixer = hashlib.blake2b(key = seeds[1].encode('utf-8'), digest_size = 64)
+		blake_mixer = hashlib.blake2b(key = f"{seeds[1]}:{seeds[0]}".encode('utf-8'), digest_size = 64)
 		
 		blake_mixer.update(f"{seeds[2]}:{seeds[3]}".encode('utf-8'))
 		supersalt = blake_mixer.digest()
@@ -80,16 +80,19 @@ class Password:
 		else:
 			final_encoded = base64.urlsafe_b64encode(hash_bytes).decode('utf-8')
 
-		processed_password = Password.intertwine(final_encoded)
+		processed_password = Password.intertwine(final_encoded, base_permission)
 		return processed_password[:outputSize] if outputSize else processed_password
 	
 	@staticmethod
-	def intertwine(password):
+	def intertwine(password, base_permition):
 		sha512_hash = hashlib.sha512(password[::-1].encode('utf-8')).digest()
 		encoded_hash = base64.urlsafe_b64encode(sha512_hash).decode('utf-8')
 
 		intertwined = ''.join(a + b for a, b in zip(encoded_hash, password))
 
-		# The code return a passowrd with 4 '=' equal signs at the end,
+		# if you dont use the base85, the code return a passowrd with 4 '=' equal signs at the end,
 		# the "-4" operation is to get rid of that
-		return intertwined[:-Password.TRUNCATE_PADDING]
+		if base_permition:
+			return intertwined
+		else:
+			return intertwined[:-Password.TRUNCATE_PADDING]
