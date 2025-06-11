@@ -1,7 +1,7 @@
 import base64, hashlib, hmac, secrets
 from argon2.low_level import hash_secret_raw, Type
 from getpass import getpass
-from .Action import ask
+from ..Action import ask
 
 class Password:
 
@@ -65,7 +65,7 @@ class Password:
 
 		return seeds
     
-	def passwordGen(self, outputSize, seeds, base_permission):
+	def passwordGen(self, output_size, seeds, base_permission):
 		blake_mixer = hashlib.blake2b(key = f"{seeds[1]}:{seeds[0]}".encode('utf-8'), digest_size = 64)
 		
 		blake_mixer.update(f"{seeds[2]}:{seeds[3]}".encode('utf-8'))
@@ -81,7 +81,7 @@ class Password:
 			final_encoded = base64.urlsafe_b64encode(hash_bytes).decode('utf-8')
 
 		processed_password = Password.intertwine(final_encoded, base_permission)
-		return processed_password[:outputSize] if outputSize else processed_password
+		return processed_password[:output_size] if output_size else processed_password
 	
 	@staticmethod
 	def intertwine(password, base_permition):

@@ -1,13 +1,20 @@
-import pyperclip
-from script.PasswordGen import Password
-from script.Action import ask
+from script.ENG_US.PasswordGen import Password
+from script.Action import ask, showPassword, displayHash
 
-if __name__ == "__main__":
+def main(language):
 	data_package = Password.askInstance()
-	print(f"\n{data_package[0]}")
-	pyperclip.copy(data_package[0])
-	print(f"This password has {len(data_package[0])} characters\n")
-	if data_package[1] != None:
+	showPassword(data_package)
+	if language:
+		print(f"This password has {len(data_package[0])} characters\n")
+	else:
+		print(f"Essa senha tem {len(data_package[0])} caracteres")
+
+	if data_package[1] != None and language:
 		output = ask("Do you want to display the secret hash? (0,1): ")
-		if output:
-			print(f"{data_package[1]}")
+	elif data_package[1] != None and not language:
+		output = ask("Você quer que o script mostre o hash gerado? (0,1): ")
+	displayHash(output, data_package)
+
+
+if __name__ == main:
+	main(False)
