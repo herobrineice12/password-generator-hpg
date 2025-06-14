@@ -1,7 +1,8 @@
 import base64, hashlib, hmac, secrets
 from argon2.low_level import hash_secret_raw, Type
+from typing import Optional
 from getpass import getpass
-from ..Action import ask
+from ..Action import ask, intInput
 
 class Password:
 
@@ -20,11 +21,11 @@ class Password:
 
 		print("Safe mode determines if the inputs used in the application will be show on the console")
 		safe_mode = ask("Safe mode? (0,1): ")
-		lock = int(input("Do you want to limit output length? (Nothing or 0 for no lock): "))
+		lock = intInput("Do you want to limit output length? (Nothing or 0 for no lock): ")
 		hash = ask("Do you want to generate a hash for the master key? (0,1): ")
 		base_permission = ask("Do you want a base85 password and the service supports it? (0,1): ")
 
-		lock = None if lock in ['', 0] else lock
+		lock = 255 if lock in ['', 0] else lock
 
 		if hash:
 			secret_key = Password.hashGen(safe_mode)
@@ -37,7 +38,7 @@ class Password:
 			print("Its important to keep the key, context and master key below a secret or private for more security")
 
 		attributes = Shell.askInfo(safe_mode, hash)
-		password = Shell.passwordGen(lock, attributes, base_permission)
+		password = Shell.passwordGen(attributes, base_permission, lock)
 		data[0] = password
 
 		return data
@@ -65,7 +66,7 @@ class Password:
 
 		return seeds
     
-	def passwordGen(self, output_size, seeds, base_permission):
+	def passwordGen(self, seeds, base_permission, output_size):
 		blake_mixer = hashlib.blake2b(key = f"{seeds[1]}:{seeds[0]}".encode('utf-8'), digest_size = 64)
 		
 		blake_mixer.update(f"{seeds[2]}:{seeds[3]}".encode('utf-8'))
@@ -84,15 +85,26 @@ class Password:
 		return processed_password[:output_size] if output_size else processed_password
 	
 	@staticmethod
-	def intertwine(password, base_permition):
+	def intertwine(password, base_permition, loop: Optional[bool] = False) -> str:
 		sha512_hash = hashlib.sha512(password[::-1].encode('utf-8')).digest()
 		encoded_hash = base64.urlsafe_b64encode(sha512_hash).decode('utf-8')
 
 		intertwined = ''.join(a + b for a, b in zip(encoded_hash, password))
 
+		if loop:
+			return intertwined
+
 		# if you dont use the base85, the code return a passowrd with 4 '=' equal signs at the end,
 		# the "-4" operation is to get rid of that
 		if base_permition:
+			expansion = base64.b85encode(hashlib.blake2b(intertwined.encode(),digest_size = 64).digest()).decode('utf-8')			
+			expansion = Password.intertwine(expansion, True, True)
+
+			intertwined = ''.join(a + b for a, b in zip(expansion, intertwined))
 			return intertwined
 		else:
-			return intertwined[:-Password.TRUNCATE_PADDING]
+			expansion = base64.b64encode(hashlib.blake2b(password.encode(),digest_size = 64).digest()).decode('utf-8')
+			expansion = Password.intertwine(expansion, True, True)
+
+			intertwined = ''.join(a + b for a, b in zip(expansion, intertwined))
+			return intertwined.strip('=')

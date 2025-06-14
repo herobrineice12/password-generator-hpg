@@ -1,26 +1,45 @@
-import pyperclip
-from ..SelectLanguage import language
+from pyperclip import copy
+
+language: str = ''
 
 def showPassword(data_package):
     print(f"\n{data_package[0]}")
-    pyperclip.copy(data_package[0])
+    copy(data_package[0])
 
 def displayHash(output, data_package):
     if output:
         print(f"{data_package[1]}")
 
 def ask(message: str) -> bool:
-    choice = [0,1]
+    choice = ['0','1']
     while True:
         try:
-            variable = int(input(message))
-            if variable in choice and variable == 0:
-                return False
-            elif variable in choice and variable == 1:
-                return True
-            elif variable == -1:
-                exit()    
+            variable = input(message)
+            if variable == "-1":
+                exit(0)
+            elif variable in choice:
+                return variable == '1' 
             break
 
         except Exception:
-            print("Please, input the available options")
+            print("Please, input a available options")
+
+def intInput(message: str) -> int:
+    MIN_LIMIT = -1
+    MAX_LIMIT = 256
+
+    while True:
+        try:
+            variable = int(input(message))
+            if variable == -1:
+                exit(0)
+
+            if variable > MIN_LIMIT and variable <= MAX_LIMIT:
+                return variable
+            elif variable < MIN_LIMIT and variable > -MAX_LIMIT:
+                return abs(variable)
+            else:
+                raise ValueError
+
+        except Exception:
+            print(f"Please, input a available option ({MIN_LIMIT} to finish the program, 0 for no limit and max of {MAX_LIMIT})")
