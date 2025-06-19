@@ -4,7 +4,10 @@ language: str = ''
 
 def showPassword(data_package):
     print(f"\n{data_package[0]}")
-    copy(data_package[0])
+    try:
+        copy(data_package[0])
+    except Exception:
+        print(f"Erro: {Exception.__cause__}")
 
 def displayHash(output, data_package):
     if output:
@@ -16,10 +19,11 @@ def ask(message: str) -> bool:
         try:
             variable = input(message)
             if variable == "-1":
+                print("\nEnding the program...")
                 exit(0)
             elif variable in choice:
                 return variable == '1' 
-            break
+            raise ValueError
 
         except Exception:
             print("Please, input a available options")
