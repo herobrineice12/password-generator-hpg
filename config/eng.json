@@ -1,0 +1,29 @@
+{
+	"context": "Context",
+	"key1": "Fist Key",
+	"key2": "Second Key",
+	"key3": "Third Key",
+	"master_key": "Master Key",
+	
+	"hash_message_input": "Insert the message you want to be used to create the output: ",
+	"safe_mode_input": "Would you like to turn on safe mode? (0,1): ",
+	"lock_input": "Would you like to limit the password output? 0 for no limit 1-255: ",
+	"generate_message_input": "Would you like to generate a hash for the master key? (0,1): ",
+	"base_permission_input": "Do you want a base85 password and the service supports it? (0,1): ",
+	"value_set_input": "Set a value for ",
+
+	"clear_button": "Clear",
+	"generate_button": "Generate",
+
+	"safe_mode_instruction": "Safe mode determines if the values inputted will be displayed on sceen, for better security, choose ON",
+	"safe_mode_warning": "Its important to keep the keys, context and the master key as a secret or private for more security",
+	
+	"password_length": "The password this number of characters: ",
+	"hash_show": "Would you like to display the hash? (0,1): ",
+	"program_ending": "Ending the program...",
+	
+	"value_error": "Please input available options",
+	"value_error_for_limit": "Please, input a available option (-1 to finish the program, 0 for no limit and max of 256",
+
+	"loop_interaction": "Would you like to generate another password? (0,1): "
+}

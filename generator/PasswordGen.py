@@ -2,12 +2,9 @@ import base64, hashlib, hmac, secrets
 from argon2.low_level import hash_secret_raw, Type
 from typing import Optional
 from getpass import getpass
-from ..Action import ask, intInput
+from Action import ask, intInput
 
 class Password:
-
-	TRUNCATE_PADDING = 4
-
 	def __init__(self, context: str, key1: str, key2: str, key3: str, master_key: str):
 		self.context = context
 		self.key1 = key1
@@ -16,14 +13,16 @@ class Password:
 		self.master_key = master_key
 
 	@staticmethod
-	def askInstance():
+	def askInstance(json):
+		global dialog
+		dialog = json
 		data = [None] * 2
 
-		print("Safe mode determines if the inputs used in the application will be show on the console")
-		safe_mode = ask("Safe mode? (0,1): ")
-		lock = intInput("Do you want to limit output length? (Nothing or 0 for no lock): ")
-		hash = ask("Do you want to generate a hash for the master key? (0,1): ")
-		base_permission = ask("Do you want a base85 password and the service supports it? (0,1): ")
+		print(dialog["safe_mode_instruction"])
+		safe_mode = ask(dialog["safe_mode_input"])
+		lock = intInput(dialog["lock_input"])
+		hash = ask(dialog["generate_message_input"])
+		base_permission = ask(dialog["base_permission_input"])
 
 		lock = 255 if lock in ['', 0] else lock
 
@@ -35,7 +34,7 @@ class Password:
 			Shell = Password("","","","","")
 
 		if not safe_mode:
-			print("Its important to keep the key, context and master key below a secret or private for more security")
+			print(dialog["safe_mode_warning"])
 
 		attributes = Shell.askInfo(safe_mode, hash)
 		password = Shell.passwordGen(attributes, base_permission, lock)
@@ -46,7 +45,7 @@ class Password:
 	@staticmethod
 	def hashGen(safe_mode):
 		input_method = getpass if safe_mode else input
-		message = input_method("Write the message you want to be used as: ")
+		message = input_method(dialog["hash_message_input"])
 		secret_key = secrets.token_bytes(32)
 
 		encoded_hash = hmac.new(key = secret_key, msg = message.encode('utf-8'), digestmod = "sha256").digest()
@@ -56,13 +55,13 @@ class Password:
 
 	def askInfo(self, safe_mode, hash):
 		seeds = [self.context, self.key1, self.key2, self.key3,self.master_key]
-		attribute_names = ["context","key1","key2","key3","master key"]
+		attribute_names = [dialog["context"],dialog["key1"],dialog["key2"],dialog["key3"],dialog["master_key"]]
 		input_method = getpass if safe_mode else input
 
 		for i in range(5):
 			if hash and i == 4:
 				continue
-			seeds[i] = input_method(f"Set a value for {attribute_names[i]}: ")
+			seeds[i] = input_method(dialog["value_set_input"] + attribute_names[i] + "...: ")
 
 		return seeds
     

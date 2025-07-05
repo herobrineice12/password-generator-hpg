@@ -1,13 +1,11 @@
 from pyperclip import copy
 
-language: str = ''
-
 def showPassword(data_package):
     print(f"\n{data_package[0]}")
     try:
         copy(data_package[0])
-    except Exception:
-        print(f"Erro: {Exception.__cause__}")
+    except Exception as e:
+        print(f"Erro: {e}")
 
 def displayHash(output, data_package):
     if output:

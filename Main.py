@@ -1,37 +1,39 @@
-from script import Action
-from script.ENG_US import PasswordGen
-from script.PT_BR import GeradorSenha
+import Action
+from generator.PasswordGen import Password
+from config import json
 
-def main(language):
-	data_package = GeradorSenha.Password.askInstance() if language == True else PasswordGen.Password.askInstance()
+def main(dialog):
+	data_package = Password.askInstance(dialog)
 
 	Action.showPassword(data_package)
-	if language:
-		print(f"Essa senha tem {len(data_package[0])} caracteres")
-	else:
-		print(f"This password has {len(data_package[0])} characters\n")
+	print(dialog["password_length"] + str(len(data_package[0])))
 
-	output = None
-	if data_package[1] != None and Action.language:
-		output = Action.ask("Você quer que o script mostre o hash gerado? (0,1): ")
-	elif data_package[1] != None and not Action.language:
-		output = Action.ask("Do you want to display the secret hash? (0,1): ")
+	if data_package[1] != None:
+		output = Action.ask(dialog["hash_show"])
 	
-	if output != None:
-		Action.displayHash(output, data_package)
+	if output:
+		print(data_package[1])
 
 if __name__ == "__main__":
 	loop = True
 
+	try:
+		language_mode = input("(1) English\n(2) Português\n-> ")
+		if language_mode == '1':
+			path = "config/eng.json"
+		elif language_mode == '2':
+			path = "config/pt-br.json"
+		else:
+			raise ValueError
+
+		dialog = json.load(path)
+	except ValueError:
+		print("Language selection failed, restart the script to try again")
+		exit(0)
+
 	while loop:
 		try:
-			language = Action.ask("English/Português? (0,1): ")
-			main(language)
-
-			if language:
-				loop = Action.ask("Gostaria de gerar outra senha? (0,1): ")
-			else:
-				loop = Action.ask("Would you like to generate another password? (0,1): ")
+			main(dialog)
 		except KeyboardInterrupt:
 			print("\nEnding the program...")
 			exit(0)
