@@ -10,9 +10,8 @@ def main(dialog):
 
 	if data_package[1] != None:
 		output = Action.ask(dialog["hash_show"])
-	
-	if output:
-		print(data_package[1])
+		if output:
+			print(data_package[1])
 
 if __name__ == "__main__":
 	loop = True
