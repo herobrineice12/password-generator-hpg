@@ -73,7 +73,7 @@ class Password:
 
 		hash_bytes = hash_secret_raw(
 			secret = seeds[4].encode('utf-8'), salt = supersalt, time_cost = 20,
-			memory_cost = 256042, parallelism = 2, hash_len = 64, type = Type.ID)
+			memory_cost = 256042, parallelism = 2, hash_len = 128, type = Type.ID)
 
 		if base_permission:
 			final_encoded = base64.b85encode(hash_bytes).decode('utf-8')
