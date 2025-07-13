@@ -7,8 +7,9 @@
 	
 	"hash_message_input": "Insert the message you want to be used to create the output: ",
 	"safe_mode_input": "Would you like to turn on safe mode? (0,1): ",
-	"lock_input": "Would you like to limit the password output? 0 for no limit 1-255: ",
+	"lock_input": "Would you like to limit the password output? 0 for no limit 1-256: ",
 	"generate_message_input": "Would you like to generate a hash for the master key? (0,1): ",
+	"generate_rounds_input": "Select (in bits) the number of calculations you want the generator to do: ",
 	"base_permission_input": "Do you want a base85 password and the service supports it? (0,1): ",
 	"value_set_input": "Set a value for ",
 
@@ -17,6 +18,8 @@
 
 	"safe_mode_instruction": "Safe mode determines if the values inputted will be displayed on sceen, for better security, choose ON",
 	"safe_mode_warning": "Its important to keep the keys, context and the master key as a secret or private for more security",
+	"generate_hash_instruction": "When you choose to generate a hash, youre given the option to select the length of the prime number used, if not given a number, a default of 8 bits will be used, for your knowledge, the length will be 2 elevated to the power of your input, for sake of performance, choose a number between 6-10",
+	"generate_hash_calculated": "Will be calculated this number of rounds: ",
 	
 	"password_length": "The password this number of characters: ",
 	"hash_show": "Would you like to display the hash? (0,1): ",

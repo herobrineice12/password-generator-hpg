@@ -1,7 +1,7 @@
 from pyperclip import copy
 
 def showPassword(data_package):
-    print(f"\n{data_package[0]}")
+    print(f"\n{data_package[0]}\n")
     try:
         copy(data_package[0])
     except Exception as e:
@@ -26,10 +26,7 @@ def ask(message: str) -> bool:
         except Exception:
             print("Please, input a available options")
 
-def intInput(message: str) -> int:
-    MIN_LIMIT = -1
-    MAX_LIMIT = 256
-
+def intInput(message: str, MIN_LIMIT: int = -1, MAX_LIMIT: int = 256) -> int:
     while True:
         try:
             variable = int(input(message))

@@ -1,8 +1,8 @@
 import base64, hashlib, hmac, secrets
 from argon2.low_level import hash_secret_raw, Type
-from typing import Optional
 from getpass import getpass
-from Action import ask, intInput
+from config.Action import ask, intInput
+from .PrimeGen import PrimeGen
 
 class Password:
 	def __init__(self, context: str, key1: str, key2: str, key3: str, master_key: str):
@@ -45,10 +45,16 @@ class Password:
 	@staticmethod
 	def hashGen(safe_mode):
 		input_method = getpass if safe_mode else input
-		message = input_method(dialog["hash_message_input"])
-		secret_key = secrets.token_bytes(32)
 
-		encoded_hash = hmac.new(key = secret_key, msg = message.encode('utf-8'), digestmod = "sha256").digest()
+		message = input_method(dialog["hash_message_input"])
+		print(dialog["generate_hash_instruction"])
+		secret_key = intInput(dialog["generate_rounds_input"], -1, 32)
+		print(dialog["generate_hash_calculated"] + str(2**secret_key))
+
+		key_bits = secrets.randbits(secret_key)
+		key_hash: str = PrimeGen.primeCounter(key_bits)
+
+		encoded_hash = hmac.new(key = key_hash.encode('utf-8'), msg = message.encode('utf-8'), digestmod = "sha256").digest()
 		generated_hash = base64.b64encode(encoded_hash)
 
 		return generated_hash.decode('utf-8')
@@ -61,7 +67,7 @@ class Password:
 		for i in range(5):
 			if hash and i == 4:
 				continue
-			seeds[i] = input_method(dialog["value_set_input"] + attribute_names[i] + "...: ")
+			seeds[i] = input_method(dialog["value_set_input"] + attribute_names[i] + ": ")
 
 		return seeds
     
@@ -75,16 +81,14 @@ class Password:
 			secret = seeds[4].encode('utf-8'), salt = supersalt, time_cost = 20,
 			memory_cost = 256042, parallelism = 2, hash_len = 128, type = Type.ID)
 
-		if base_permission:
-			final_encoded = base64.b85encode(hash_bytes).decode('utf-8')
-		else:
-			final_encoded = base64.urlsafe_b64encode(hash_bytes).decode('utf-8')
+		if base_permission: final_encoded = base64.b85encode(hash_bytes).decode('utf-8')
+		else: final_encoded = base64.urlsafe_b64encode(hash_bytes).decode('utf-8')
 
 		processed_password = Password.intertwine(final_encoded, base_permission)
 		return processed_password[:output_size] if output_size else processed_password
 	
 	@staticmethod
-	def intertwine(password, base_permition, loop: Optional[bool] = False) -> str:
+	def intertwine(password, base_permition, loop: bool = False) -> str:
 		sha512_hash = hashlib.sha512(password[::-1].encode('utf-8')).digest()
 		encoded_hash = base64.urlsafe_b64encode(sha512_hash).decode('utf-8')
 
