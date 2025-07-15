@@ -1,5 +1,5 @@
-import config.Action as Action
-import os, json
+import generator.Action as Action
+import os, json, sys
 from generator.PasswordGen import Password
 
 def main(dialog):
@@ -17,26 +17,34 @@ if __name__ == "__main__":
 
 	try:
 		language_mode = input("(1) English\n(2) Português\n-> ")
-		if language_mode == '1': rel_path = os.path.join("config","eng.json")
-		elif language_mode == '2' : rel_path = os.path.join("config","pt-br.json")
+		if language_mode == '1': file_name = "eng.json"
+		elif language_mode == '2': file_name = "pt-br.json"
 		else: raise ValueError
+		
+		if getattr(sys,'frozen',False): base_path = sys._MEIPASS
+		else: base_path = os.path.dirname(__file__)
+
+		rel_path = os.path.join(base_path,"config",file_name)
 
 		with open(rel_path,'r',encoding='utf-8') as file:
 			dialog = json.load(file)
 
 	except ValueError:
 		print("Language selection failed, restart the script to try again")
-		exit(0)
+		sys.exit(0)
+	except FileNotFoundError:
+		print("The file was not found")
+		sys.exit(1)
 	except Exception as e:
 		print(f"Erro: {e}")
-		exit(1)
+		sys.exit(1)
 
 	while loop:
 		try:
 			main(dialog)
 		except KeyboardInterrupt:
 			print("\nEnding the program...")
-			exit(0)
+			sys.exit(0)
 		except Exception as e:
 			print(f"Erro: {e}")
-			exit(1)
+			sys.exit(1)

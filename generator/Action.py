@@ -1,4 +1,5 @@
 from pyperclip import copy
+import secrets, sys
 
 def showPassword(data_package):
     print(f"\n{data_package[0]}\n")
@@ -18,7 +19,7 @@ def ask(message: str) -> bool:
             variable = input(message)
             if variable == "-1":
                 print("\nEnding the program...")
-                exit(0)
+                sys.exit(0)
             elif variable in choice:
                 return variable == '1' 
             raise ValueError
@@ -31,7 +32,7 @@ def intInput(message: str, MIN_LIMIT: int = -1, MAX_LIMIT: int = 256) -> int:
         try:
             variable = int(input(message))
             if variable == -1:
-                exit(0)
+                sys.exit(0)
 
             if variable > MIN_LIMIT and variable <= MAX_LIMIT:
                 return variable
@@ -42,3 +43,14 @@ def intInput(message: str, MIN_LIMIT: int = -1, MAX_LIMIT: int = 256) -> int:
 
         except Exception:
             print(f"Please, input a available option ({MIN_LIMIT} to finish the program, 0 for no limit and max of {MAX_LIMIT})")
+
+def generateBits(firstBit: int, secondBit: int = None):
+    floor = 2**firstBit
+    ceil = 2**secondBit
+    
+    if secondBit == None:
+        bit = secrets.randbits(firstBit)
+    else:
+        bit = secrets.randbelow(ceil - floor + 1) + floor
+        
+    return bit

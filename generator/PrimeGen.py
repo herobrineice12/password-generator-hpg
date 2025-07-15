@@ -1,8 +1,9 @@
+from .Action import generateBits
 from multiprocessing import Pool
 
 class PrimeGen:
     @staticmethod
-    def primeCounter(rounds: int, start: int = (10**6) + 1) -> str:
+    def primeCounter(rounds: int, start: int = generateBits(20,21)) -> str:
         limit: int = start + rounds
         salt: str = ""
 

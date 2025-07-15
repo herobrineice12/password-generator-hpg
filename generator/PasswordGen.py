@@ -1,7 +1,7 @@
 import base64, hashlib, hmac, secrets
 from argon2.low_level import hash_secret_raw, Type
 from getpass import getpass
-from config.Action import ask, intInput
+from .Action import ask, intInput
 from .PrimeGen import PrimeGen
 
 class Password:
