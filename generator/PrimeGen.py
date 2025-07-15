@@ -7,8 +7,10 @@ class PrimeGen:
         limit: int = start + rounds
         salt: str = ""
 
+        if start % 2 == 0: start += 1
+
         candidates = [i for i in range(start, limit, 2)
-                      if i % 2 != 0 and i % 3 != 0 and i % 5 != 0 and i % 7 != 0]
+                      if i % 3 != 0 and i % 5 != 0 and i % 7 != 0]
 
         with Pool() as pool:
             results = pool.map(PrimeGen.primeCheck,candidates)        

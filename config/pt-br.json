@@ -1,8 +1,8 @@
 {
 	"context": "Contexto",
-	"key1": "Chave 3",
+	"key1": "Chave 1",
 	"key2": "Chave 2",
-	"key3": "Chave 1",
+	"key3": "Chave 3",
 	"master_key": "Chave mestre",
 
 	"hash_message_input": "Insira uma messagem para utilizar na geração do hash: ",

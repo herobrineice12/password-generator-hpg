@@ -1,7 +1,7 @@
 from pyperclip import copy
 import secrets, sys
 
-def showPassword(data_package):
+def showPassword(data_package) -> None:
     print(f"\n{data_package[0]}\n")
     try:
         copy(data_package[0])
@@ -44,13 +44,13 @@ def intInput(message: str, MIN_LIMIT: int = -1, MAX_LIMIT: int = 256) -> int:
         except Exception:
             print(f"Please, input a available option ({MIN_LIMIT} to finish the program, 0 for no limit and max of {MAX_LIMIT})")
 
-def generateBits(firstBit: int, secondBit: int = None):
+def generateBits(firstBit: int, secondBit: int = None) -> int:
     floor = 2**firstBit
     ceil = 2**secondBit
     
     if secondBit == None:
-        bit = secrets.randbits(firstBit)
+        bit: int = secrets.randbits(firstBit)
     else:
-        bit = secrets.randbelow(ceil - floor + 1) + floor
+        bit: int = secrets.randbelow(ceil - floor + 1) + floor
         
     return bit
