@@ -50,6 +50,7 @@ class Password:
 
 		message: str = input_method(dialog["hash_message_input"])
 		print(dialog["generate_hash_instruction"])
+		
 		secret_key: str = intInput(dialog["generate_rounds_input"], -1, 32)
 		print(dialog["generate_hash_calculated"] + str(2**secret_key))
 
@@ -62,12 +63,13 @@ class Password:
 		return generated_hash.decode('utf-8')
 
 	def askInfo(self) -> list:
-		seeds: list = [self.context, self.key1, self.key2, self.key3,self.master_key] if self.master_key == None else [self.context, self.key1, self.key2, self.key3]
+		seeds: list = [self.context, self.key1, self.key2, self.key3,self.master_key]
 		attribute_names: list = [dialog["context"],dialog["key1"],dialog["key2"],dialog["key3"],dialog["master_key"]]
 		input_method = getpass if safe_mode else input
 
-		for i in range(len(seeds)):
-			seeds[i] = input_method(dialog["value_set_input"] + attribute_names[i] + ": ")
+		for i in range(5):
+			if seeds[i] == None:
+				seeds[i] = input_method(dialog["value_set_input"] + attribute_names[i] + ": ")
 
 		return seeds
     

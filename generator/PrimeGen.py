@@ -18,12 +18,11 @@ class PrimeGen:
         for num, is_prime in zip(candidates, results):
             if is_prime:
                 salt += str(num)
-
+        
         return salt
-    
+
     @staticmethod
     def primeCheck(number: int) -> bool:
         for i in range(11, int(number ** 0.5) + 1, 2):
             if number % i == 0: return False
-        
-        return True
+        else: return True

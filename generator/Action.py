@@ -12,8 +12,7 @@ def displayHash(output, data_package):
     if output:
         print(f"{data_package[1]}")
 
-def ask(message: str) -> bool:
-    choice = ['0','1']
+def ask(message: str, choice: list[str] = ['0','1']) -> bool:
     while True:
         try:
             variable = input(message)

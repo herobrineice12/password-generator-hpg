@@ -35,13 +35,13 @@ if __name__ == "__main__":
 	except Exception as e:
 		print(f"Erro: {e}")
 		sys.exit(1)
-
-	while True:
-		try:
-			main(dialog)
-		except KeyboardInterrupt:
-			print("\nEnding the program...")
-			sys.exit(0)
-		except Exception as e:
-			print(f"Erro: {e}")
-			sys.exit(1)
+	else:
+		while True:
+			try:
+				main(dialog)
+			except KeyboardInterrupt:
+				print("\nEnding the program...")
+				sys.exit(0)
+			except Exception as e:
+				print(f"Erro: {e}")
+				sys.exit(1)
