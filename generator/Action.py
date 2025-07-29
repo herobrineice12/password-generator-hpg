@@ -1,12 +1,19 @@
-from pyperclip import copy
-import secrets, sys
+import pyperclip, secrets, sys, subprocess, platform
 
 def showPassword(data_package) -> None:
     print(f"\n{data_package[0]}\n")
     try:
-        copy(data_package[0])
+        copyPassword(data_package[0])
     except Exception as e:
-        print(f"Erro: {e}")
+        print(e)
+
+def copyPassword(variable: str) -> None:
+    if "termux" in platform.platform().lower():
+        subprocess.run(['termux-clipboard-set'],variable)
+    elif pyperclip.is_available:
+        pyperclip.copy(variable)
+    else:
+        raise pyperclip.PyperclipException
 
 def displayHash(output, data_package):
     if output:
@@ -26,7 +33,7 @@ def ask(message: str, choice: list[str] = ['0','1']) -> bool:
         except Exception:
             print("Please, input a available options")
 
-def intInput(message: str, MIN_LIMIT: int = -1, MAX_LIMIT: int = 256) -> int:
+def intInput(message: str, MIN_LIMIT: int = -1, MAX_LIMIT: int = 255) -> int:
     while True:
         try:
             variable = int(input(message))

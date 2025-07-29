@@ -14,14 +14,16 @@ class Password:
 
 	@staticmethod
 	def askInstance(json) -> list:
-		global dialog
-		global safe_mode
+		global dialog, safe_mode
 
 		dialog = json
 		data: list = [None] * 2
 
-		print(dialog["safe_mode_instruction"])
-		safe_mode = ask(dialog["safe_mode_input"])
+		safe_mode = ask(
+			dialog["safe_mode_instruction"] +
+			"\n" +
+			dialog["safe_mode_input"]
+		)
 		lock: bool = intInput(dialog["lock_input"])
 		hash: bool = ask(dialog["generate_message_input"])
 		base_permission: bool = ask(dialog["base_permission_input"])
@@ -29,8 +31,7 @@ class Password:
 		lock: int = 255 if lock in ['', 0] else lock
 
 		if hash:
-			secret_key = Password.hashGen()
-			Shell = Password(master_key=secret_key)
+			Shell = Password(master_key = (secret_key := Password.hashGen()))
 			data[1] = secret_key
 		else:
 			Shell = Password()

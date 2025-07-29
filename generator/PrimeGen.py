@@ -1,5 +1,5 @@
-from .Action import generateBits
 from multiprocessing import Pool
+from .Action import generateBits
 
 class PrimeGen:
     @staticmethod
