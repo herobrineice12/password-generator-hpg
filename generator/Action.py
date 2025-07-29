@@ -9,11 +9,11 @@ def showPassword(data_package) -> None:
 
 def copyPassword(variable: str) -> None:
     if "termux" in platform.platform().lower():
-        subprocess.run(['termux-clipboard-set'],variable)
-    elif pyperclip.is_available:
+        subprocess.run(['termux-clipboard-set'],input=variable.encode())
+    elif pyperclip.is_available():
         pyperclip.copy(variable)
     else:
-        raise pyperclip.PyperclipException
+        raise pyperclip.PyperclipException("No copy method available")
 
 def displayHash(output, data_package):
     if output:
