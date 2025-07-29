@@ -6,21 +6,18 @@ def isTermux() -> bool:
 
 def showPassword(data_package) -> None:
     print(f"\n{data_package[0]}\n")
-    try:
-        copyPassword(data_package[0])
-    except Exception as e:
-        print(f"Erro: {e}")
+    copyPassword(data_package[0])
 
 def copyPassword(variable: str) -> None:
-    if isTermux():
-        try:
-            subprocess.run(['termux-clipboard-set'],input=variable.encode(),check=True)
-        except Exception as e:
-            print(f"Erro: {e}")
-    elif pyperclip.is_available():
-        pyperclip.copy(variable)
-    else:
-        raise pyperclip.PyperclipException("No copy method available")
+    try:
+        if isTermux():
+            subprocess.run(['termux-clipboard-set'],input=variable.encode(),check=True)        
+        elif not isTermux():
+            pyperclip.copy(variable)
+        else:
+            raise pyperclip.PyperclipException("No copy method available")
+    except Exception as e:
+        print(f"Error at trying to copy: {e}")
 
 def displayHash(output, data_package):
     if output:
@@ -38,7 +35,7 @@ def ask(message: str, choice: list[str] = ['0','1']) -> bool:
             raise ValueError
 
         except Exception:
-            print("Please, input a available options")
+            print("Please, input a available options!")
 
 def intInput(message: str, MIN_LIMIT: int = -1, MAX_LIMIT: int = 255) -> int:
     while True:

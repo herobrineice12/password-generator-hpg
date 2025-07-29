@@ -42,5 +42,5 @@ if __name__ == "__main__":
 		print("\nEnding the program...\n")
 		sys.exit(0)
 	except Exception as e:
-		print(f"Erro: {e}")
+		print(f"Error at Main module: {e}")
 		sys.exit(1)
