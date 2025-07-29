@@ -2,7 +2,7 @@ import pyperclip, secrets, sys, subprocess, os
 
 #If it is a android envirorement, it will problably be termux
 def isTermux() -> bool:
-    return "termux" in os.path.isdir("/storage/emulated/0/")
+    return os.path.isdir("/storage/emulated/0/")
 
 def showPassword(data_package) -> None:
     print(f"\n{data_package[0]}\n")
