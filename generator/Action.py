@@ -5,11 +5,14 @@ def showPassword(data_package) -> None:
     try:
         copyPassword(data_package[0])
     except Exception as e:
-        print(e)
+        print(f"Erro: {e}")
 
 def copyPassword(variable: str) -> None:
     if "termux" in platform.platform().lower():
-        subprocess.run(['termux-clipboard-set'],input=variable.encode())
+        try:
+            subprocess.run(['termux-clipboard-set'],input=variable.encode(),check=True)
+        except Exception as e:
+            print(f"Erro: {e}")
     elif pyperclip.is_available():
         pyperclip.copy(variable)
     else:
